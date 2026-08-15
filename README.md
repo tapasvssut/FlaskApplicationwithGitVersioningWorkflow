@@ -1,11 +1,19 @@
 # Flask Application with Git Versioning Workflow
 
-## Plan
-1. Build a basic Flask app with mandatory health endpoints.
-2. Implement Voting Application endpoints in the `dev` branch as Version 1.
-3. Add one enhancement endpoint (`/reset`) in the `dev` branch as Version 2.
-4. Merge only stable features from `dev` to `main`.
-5. Document every step so another person can run and understand the full flow.
+## Assignment Completion Status
+
+| Task | Status | Notes |
+|---|---|---|
+| Task 1: Basic Flask endpoints `/` and `/health` | Done | Both return correct responses |
+| Task 2: Git setup and Version 1 release to GitHub | Incomplete | Git history needs to be redone; GitHub repo not yet created |
+| Task 3: Voting app endpoints `/vote/<name>` and `/results` | Done | Working in `app.py` |
+| Task 4: Version 2 `/reset` endpoint | Done (code only) | Code exists but not committed as a separate Version 2 commit |
+| Task 5: README documentation | Mostly done | Screenshots missing (mandatory) |
+
+### What Still Needs to Be Done
+1. **Redo git history** — current single commit contains both V1 and V2 code mixed together. Must have two separate merge commits.
+2. **Create GitHub repository** and push both `dev` and `main` branches with correct history.
+3. **Add screenshots** to this README (app in browser, GitHub branches page, commit/merge history).
 
 ## Project Title and Description
 This project is a simple web app made with Flask.
@@ -159,19 +167,72 @@ git merge dev
 git push
 ```
 
+## Pending Steps to Complete the Assignment
+
+### Step 1: Fix Git History (Mandatory)
+The current git history has a single commit on `main` that already contains the `/reset` endpoint.  
+The evaluator expects two separate merge events. Run these commands to redo it correctly:
+
+```powershell
+cd C:\HeroVired\FlaskApplicationwithGitVersioningWorkflow
+
+# Wipe existing git history
+Remove-Item -Recurse -Force .git
+git init
+git branch -M main
+```
+
+Now temporarily remove the `/reset` route from `app.py`, then:
+
+```powershell
+git checkout -b dev
+git add .
+git commit -m "Version 1: add Flask app with health and voting endpoints"
+git checkout main
+git merge dev --no-ff -m "Merge dev into main: Version 1 release"
+```
+
+Now add the `/reset` route back into `app.py`, then:
+
+```powershell
+git checkout dev
+git add app.py README.md
+git commit -m "Version 2: add reset endpoint for voting app"
+git checkout main
+git merge dev --no-ff -m "Merge dev into main: Version 2 release"
+```
+
+### Step 2: Create GitHub Repo and Push
+
+Install GitHub CLI if not already installed:
+```powershell
+winget install --id GitHub.cli -e
+```
+
+Reopen PowerShell, then:
+```powershell
+$env:Path = [System.Environment]::GetEnvironmentVariable("Path","Machine") + ";" + [System.Environment]::GetEnvironmentVariable("Path","User")
+gh auth login
+gh repo create FlaskApplicationwithGitVersioningWorkflow --public --source . --remote origin
+git push -u origin main
+git push -u origin dev
+```
+
+### Step 3: Add Screenshots (Mandatory)
+Create a `screenshots/` folder and add these three images:
+1. Browser showing a working endpoint (e.g. `/vote/alice`)
+2. GitHub repository page showing both `dev` and `main` branches
+3. GitHub commit/merge history showing Version 1 and Version 2 merge commits
+
+Then replace the placeholder lines below with the actual images.
+
 ## Screenshots (Mandatory in README)
-Embed these images directly in this README after you capture them:
-1. App running in browser showing at least one working endpoint.
-2. GitHub repository page showing both `dev` and `main` branches.
-3. Commit/merge history showing Version 1 and Version 2 releases.
 
-Example markdown format:
+<!-- Replace these placeholders after capturing screenshots -->
 
-```markdown
 ![App Running](screenshots/app-running.png)
 ![Branches](screenshots/github-branches.png)
 ![Merge History](screenshots/git-history.png)
-```
 
 ## Common Mistakes to Avoid
 - Doing all work in `main` instead of `dev`.
